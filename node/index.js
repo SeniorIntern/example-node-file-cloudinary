@@ -15,6 +15,8 @@ app.get("/info", async (req, res) => {
 app.post("/foo", async (req, res) => {
   console.log(req.body);
   console.log(req.files); // log files
+
+  res.status(200).json(req.body);
 });
 
 const port = 3000;
