@@ -39,6 +39,7 @@ export default function App() {
             id="file"
             name="file"
             type="file"
+            multiple
             placeholder="Select Image"
             className="border-black border-[1px] w-full rounded-md p-2"
           />
