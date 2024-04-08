@@ -28,6 +28,7 @@ function App() {
     <main className="min-h-screen flex justify-center items-center">
       <form
         onSubmit={handleSubmit(onSubmit)}
+        encType="multipart/form-data"
         className="border-black w-2/5 border-[1px] rounded-md p-8 flex flex-col gap-4"
       >
         <div>
