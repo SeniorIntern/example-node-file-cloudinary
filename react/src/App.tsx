@@ -1,15 +1,33 @@
-import { FormEvent } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FieldValues, useForm } from "react-hook-form";
+import { z } from "zod";
 import "./App.css";
+import axios from "axios";
 
 function App() {
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const schema = z.object({
+    firstName: z.string().min(3),
+    lastName: z.string().min(3),
+    file: z.any(),
+  });
+
+  type FormData = z.infer<typeof schema>;
+
+  const {
+    handleSubmit,
+    formState: { errors },
+    register,
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const onSubmit = (data: FieldValues) => {
+    console.log(data);
+    axios.post("http://localhost:3000/foo", data);
   };
 
   return (
     <main className="min-h-screen flex justify-center items-center">
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleSubmit(onSubmit)}
         className="border-black w-2/5 border-[1px] rounded-md p-8 flex flex-col gap-4"
       >
         <div>
@@ -17,11 +35,14 @@ function App() {
             Enter First Name
           </label>
           <input
-            name="fname"
+            {...register("firstName")}
             id="fname"
-            placeholder="Jim"
+            placeholder="Jimmy"
             className="border-black border-[1px] w-full rounded-md p-2"
           />
+          <span className="text-red-400">
+            {errors.firstName && errors.firstName.message}
+          </span>
         </div>
 
         <div>
@@ -29,11 +50,14 @@ function App() {
             Enter Last Name
           </label>
           <input
-            name="lname"
+            {...register("lastName")}
             id="lname"
             placeholder="Smith"
             className="border-black border-[1px] w-full rounded-md p-2"
           />
+          <span className="text-red-400">
+            {errors.lastName && errors.lastName.message}
+          </span>
         </div>
 
         <div>
@@ -41,7 +65,7 @@ function App() {
             Choose an image
           </label>
           <input
-            name="image"
+            {...register("file")}
             id="image"
             type="file"
             placeholder="Select Image"
